@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Spotify-Exam-Backend" />
+        <module name="exam2022_backend" />
+        <module name="startcode_security_backend" />
+        <module name="startcode_security" />
+        <module name="security-start" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Spotify-Exam-Backend" options="-endorseddirs &quot;C:\Users\olive\Documents\GitHub\programming eksam 2022\Spotify-Exam-Backend\target/endorsed&quot;" />
+      <module name="exam2022_backend" options="-endorseddirs &quot;C:\Users\olive\Documents\GitHub\programming eksam 2022\exam2022_backend\target/endorsed&quot;" />
+      <module name="security-start" options="-endorseddirs C:\Users\Alek\Dropbox\Dev\3.sem\startcode_secured\target/endorsed" />
+      <module name="startcode_security" options="-endorseddirs &quot;D:\3. Semester\BackEndStartCode\startcode_security\target/endorsed&quot;" />
+      <module name="startcode_security_backend" options="-endorseddirs C:\Users\olive\Documents\GitHub\startcode_security_backend\target/endorsed" />
+    </option>
+  </component>
+</project>
