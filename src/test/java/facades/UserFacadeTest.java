@@ -113,11 +113,11 @@ public class UserFacadeTest {
     }
 
     @Test
-    public void updateUserPasswordTest() {
+    public void updateUserPasswordTest() throws Exception {
         EntityManager em = emf.createEntityManager();
         User user;
 
-        facade.updateUserPassword("user2","test123");
+        facade.updateUserPassword("user2","test123", "kode123");
 
         try {
             user = em.find(User.class, "user2");

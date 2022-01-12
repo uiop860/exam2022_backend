@@ -111,11 +111,14 @@ public class UserEndpoint {
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
-
-        try {
-            return gson.toJson(USER_FACADE.createUser(username, password));
-        } catch (Exception e) {
-            throw new API_Exception("Failed to create user", 400, e);
+        if(username.length() != 0 && password.length() != 0){
+            try {
+                return gson.toJson(USER_FACADE.createUser(username, password));
+            } catch (Exception e) {
+                throw new API_Exception("Failed to create user", 400, e);
+            }
+        } else{
+            throw new API_Exception("Failed to create user", 400);
         }
     }
 
@@ -134,7 +137,7 @@ public class UserEndpoint {
         return gson.toJson(response);
     }
 
-    @PUT
+    @POST
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     @Path("update/{userName}")
@@ -142,18 +145,20 @@ public class UserEndpoint {
     public String updateUserPassword(@PathParam("userName") String userName, String jsonString) throws API_Exception {
 
         String newPassword;
+        String oldPassword;
         StatusDTO response;
 
         try {
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
             newPassword = json.get("password").getAsString();
+            oldPassword = json.get("oldPassword").getAsString();
 
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
 
         try {
-            response = USER_FACADE.updateUserPassword(userName, newPassword);
+            response = USER_FACADE.updateUserPassword(userName, newPassword, oldPassword);
 
         } catch (Exception e) {
             throw new API_Exception("Failed to update user", 400, e);

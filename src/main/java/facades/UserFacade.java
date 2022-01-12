@@ -91,14 +91,18 @@ public class UserFacade {
         return new StatusDTO("Success", "Deleted user on username: " + userName);
     }
 
-    public StatusDTO updateUserPassword(String userName, String newPassword) {
+    public StatusDTO updateUserPassword(String userName, String newPassword, String oldPassword) throws Exception {
         EntityManager em = emf.createEntityManager();
 
         try {
             em.getTransaction().begin();
             User user = em.find(User.class, userName);
-            user.setUserPass(newPassword);
-            em.merge(user);
+            if(user.verifyPassword(oldPassword,user.getUserPass())){
+                user.setUserPass(newPassword);
+                em.merge(user);
+            } else {
+                throw new Exception();
+            }
             em.getTransaction().commit();
 
         } finally {
