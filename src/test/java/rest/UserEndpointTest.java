@@ -202,7 +202,7 @@ public class UserEndpointTest {
     @Test
     public void updateUserPasswordTest() {
         JSONObject requestParams = new JSONObject();
-        requestParams.put("username","user1");
+        requestParams.put("oldPassword","kode123");
         requestParams.put("password","test1");
 
         login("user1", "kode123");
@@ -211,7 +211,7 @@ public class UserEndpointTest {
                 .header("x-access-token", securityToken)
                 .body(requestParams.toJSONString())
             .when()
-                .put("user/update/user1")
+                .post("user/update/user1")
             .then()
                 .statusCode(200)
                 .body("status", equalTo("Success"))
