@@ -29,10 +29,16 @@ public class User implements Serializable {
     private String userPass;
 
     @JoinTable(name = "user_roles", joinColumns = {
-            @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
-            @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
+            @JoinColumn(name = "user_name", referencedColumnName = "user_name")},
+            inverseJoinColumns = { @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
+
+    @JoinTable(name = "user_trips", joinColumns = {
+            @JoinColumn(name = "user_name", referencedColumnName = "user_name")},
+            inverseJoinColumns = { @JoinColumn(name = "trip_id", referencedColumnName = "id")})
+    @ManyToMany()
+    private List<Trip> trips = new ArrayList<>();
 
     public List<String> getRolesAsStrings() {
         if (roleList.isEmpty()) {
@@ -85,6 +91,11 @@ public class User implements Serializable {
 
     public void addRole(Role userRole) {
         roleList.add(userRole);
+    }
+
+    public void addTrip(Trip trip){
+        this.trips.add(trip);
+        trip.addUser(this);
     }
 
 }
