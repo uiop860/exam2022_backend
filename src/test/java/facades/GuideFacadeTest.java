@@ -49,17 +49,17 @@ public class GuideFacadeTest {
             Calendar cal = Calendar.getInstance();
             cal.setTimeZone(TimeZone.getTimeZone("CET"));
 
-            User user = new User("user", "kode123","Åmarksvej 24","27463547","user@user.com","1967","Mand");
-            User admin = new User("admin", "kode123","Fredensvej 65", "96758453", "admin@admin.com","1990","Kvinde");
-            User both = new User("user_admin", "kode123", "Kildevej 154","94857693","both@both.com","2000","Mand");
+            User user = new User("user", "kode123", "Åmarksvej 24", "27463547", "user@user.com", "1967", "Mand");
+            User admin = new User("admin", "kode123", "Fredensvej 65", "96758453", "admin@admin.com", "1990", "Kvinde");
+            User both = new User("user_admin", "kode123", "Kildevej 154", "94857693", "both@both.com", "2000", "Mand");
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
-            cal.set(2022,Calendar.JANUARY,1);
-            Trip trip1 = new Trip("Hike", cal.getTime() , "Himmelbjerget","2 hours","Water");
-            cal.set(2022,Calendar.MARCH,17);
-            Trip trip2 = new Trip("Dance",cal.getTime(),"Byen","5 hours","Dancing shoes");
-            Guide guide1 = new Guide("Anders","Mand","1987","I like to swim","www.test.com");
-            Guide guide2 = new Guide("Lisa","Kvinde","1975","I like to dance","www.test.com");
+            cal.set(2022, Calendar.JANUARY, 1);
+            Trip trip1 = new Trip("Hike", cal.getTime(), "Himmelbjerget", "2 hours", "Water");
+            cal.set(2022, Calendar.MARCH, 17);
+            Trip trip2 = new Trip("Dance", cal.getTime(), "Byen", "5 hours", "Dancing shoes");
+            Guide guide1 = new Guide("Anders", "Mand", "1987", "I like to swim", "www.test.com");
+            Guide guide2 = new Guide("Lisa", "Kvinde", "1975", "I like to dance", "www.test.com");
 
             em.getTransaction().begin();
             em.persist(userRole);
@@ -113,7 +113,7 @@ public class GuideFacadeTest {
 
         guide = facade.getGuide(1L);
 
-        Assertions.assertEquals("Anders",guide.getName());
+        Assertions.assertEquals("Anders", guide.getName());
     }
 
     @Test
@@ -122,7 +122,7 @@ public class GuideFacadeTest {
 
         guides = facade.getAlleGuides();
 
-        Assertions.assertEquals(2,guides.size());
+        Assertions.assertEquals(2, guides.size());
     }
 
     @Test
@@ -130,12 +130,12 @@ public class GuideFacadeTest {
         EntityManager em = emf.createEntityManager();
         Guide guide;
         try {
-            facade.createGuide(new GuideDTO("Brian","Mand","1970","Likes to workout","www.brian.com"));
-            TypedQuery<Guide> tq = em.createQuery("select g from Guide g where g.name = 'Brian'",Guide.class);
+            facade.createGuide(new GuideDTO("Brian", "Mand", "1970", "Likes to workout", "www.brian.com"));
+            TypedQuery<Guide> tq = em.createQuery("select g from Guide g where g.name = 'Brian'", Guide.class);
             guide = tq.getSingleResult();
         } finally {
             em.close();
         }
-        Assertions.assertEquals("1970",guide.getBirthYear());
+        Assertions.assertEquals("1970", guide.getBirthYear());
     }
 }

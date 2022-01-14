@@ -25,7 +25,7 @@ public class GuideResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"admin","user"})
+    @RolesAllowed({"admin", "user"})
     @Path("/all")
     public String getAllGuides() throws API_Exception {
         GuideFacade facade = GuideFacade.getGuideFacade(EMF);
@@ -33,15 +33,15 @@ public class GuideResource {
 
         try {
             guideDTO = facade.getAlleGuides();
-        } catch(Exception e) {
-            throw new API_Exception("Something went wrong", 400,e);
+        } catch (Exception e) {
+            throw new API_Exception("Something went wrong", 400, e);
         }
         return gson.toJson(guideDTO);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"admin","user"})
+    @RolesAllowed({"admin", "user"})
     @Path("{id}")
     public String getGuide(@PathParam("id") Long id) throws API_Exception {
 
@@ -50,8 +50,8 @@ public class GuideResource {
 
         try {
             guideDTO = facade.getGuide(id);
-        } catch(Exception e) {
-            throw new API_Exception("Something went wrong", 400,e);
+        } catch (Exception e) {
+            throw new API_Exception("Something went wrong", 400, e);
         }
         return gson.toJson(guideDTO);
     }
@@ -67,14 +67,14 @@ public class GuideResource {
 
         try {
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
-            guideDTO = gson.fromJson(json,GuideDTO.class);
+            guideDTO = gson.fromJson(json, GuideDTO.class);
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
 
         try {
             statusDTO = facade.createGuide(guideDTO);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new API_Exception("Something went wrong", 400, e);
         }
         return gson.toJson(statusDTO);

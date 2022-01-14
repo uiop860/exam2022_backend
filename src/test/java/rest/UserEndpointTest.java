@@ -1,17 +1,12 @@
 package rest;
 
-import DTO.UserDTOS.UserDTO;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import entities.Role;
 import entities.User;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
-import io.restassured.response.ResponseBodyExtractionOptions;
-import io.restassured.specification.RequestSpecification;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -22,7 +17,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -125,16 +119,15 @@ public class UserEndpointTest {
         securityToken = given()
                 .contentType("application/json")
                 .body(requestParams.toJSONString())
-            .when()
+                .when()
                 .post("user")
-            .then()
+                .then()
                 .extract().path("token");
     }
 
     private void logOut() {
         securityToken = null;
     }
-
 
 
     @Test
@@ -147,9 +140,9 @@ public class UserEndpointTest {
         given()
                 .contentType("application/json")
                 .body(requestParams.toJSONString())
-            .when()
+                .when()
                 .post("user/create")
-            .then()
+                .then()
                 .statusCode(200)
                 .body("status", equalTo("Success"))
                 .body("message", equalTo("User successfully created with username: megatest"));
@@ -165,9 +158,9 @@ public class UserEndpointTest {
         given()
                 .contentType("application/json")
                 .body(requestParams.toJSONString())
-            .when()
+                .when()
                 .post("user/create")
-            .then()
+                .then()
                 .statusCode(400)
                 .body("message", equalTo("Failed to create user"));
     }
@@ -178,9 +171,9 @@ public class UserEndpointTest {
         given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
-            .when()
+                .when()
                 .delete("user/delete/user1")
-            .then()
+                .then()
                 .statusCode(200)
                 .body("status", equalTo("Success"))
                 .body("message", equalTo("Deleted user on username: user1"));
@@ -192,9 +185,9 @@ public class UserEndpointTest {
         given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
-            .when()
+                .when()
                 .delete("user/delete/kage123")
-            .then()
+                .then()
                 .statusCode(400)
                 .body("message", equalTo("Failed to delete user"));
     }
@@ -202,35 +195,35 @@ public class UserEndpointTest {
     @Test
     public void updateUserPasswordTest() {
         JSONObject requestParams = new JSONObject();
-        requestParams.put("oldPassword","kode123");
-        requestParams.put("password","test1");
+        requestParams.put("oldPassword", "kode123");
+        requestParams.put("password", "test1");
 
         login("user1", "kode123");
         given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
                 .body(requestParams.toJSONString())
-            .when()
+                .when()
                 .post("user/update/user1")
-            .then()
+                .then()
                 .statusCode(200)
                 .body("status", equalTo("Success"))
                 .body("message", equalTo("Password changed on username: user1"));
     }
 
     @Test
-    public void partialUsernameSearchTest(){
-        login("user1","kode123");
+    public void partialUsernameSearchTest() {
+        login("user1", "kode123");
         Response response = given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
-            .when()
+                .when()
                 .get("user/search/ser")
-            .then()
+                .then()
                 .statusCode(200)
                 .extract().response();
 
         List<String> jsonResponse = response.jsonPath().getList("$");
-        Assertions.assertEquals(3,jsonResponse.size());
+        Assertions.assertEquals(3, jsonResponse.size());
     }
 }

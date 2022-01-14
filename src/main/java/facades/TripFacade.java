@@ -38,9 +38,9 @@ public class TripFacade {
         try {
             TypedQuery<Trip> tq = em.createQuery("select t from Trip t", Trip.class);
             trips = tq.getResultList();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new API_Exception();
-        }finally {
+        } finally {
             em.close();
         }
         return new TripDTO(trips).getTrips();
@@ -56,12 +56,12 @@ public class TripFacade {
             user.addTrip(trip);
             em.merge(user);
             em.getTransaction().commit();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new API_Exception();
-        }finally {
+        } finally {
             em.close();
         }
-        return new StatusDTO("Success","Trip added to " + username);
+        return new StatusDTO("Success", "Trip added to " + username);
     }
 
     public StatusDTO removeTripFromUser(String username, Long tripId) throws API_Exception {
@@ -74,28 +74,28 @@ public class TripFacade {
             user.removeTrip(trip);
             em.merge(user);
             em.getTransaction().commit();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new API_Exception();
-        }finally {
+        } finally {
             em.close();
         }
-        return new StatusDTO("Success","Trip removed from " + username);
+        return new StatusDTO("Success", "Trip removed from " + username);
     }
 
     public StatusDTO createTrip(TripDTO tripDTO) throws Exception {
         EntityManager em = emf.createEntityManager();
-        Trip trip = new Trip(tripDTO.getName(),tripDTO.getDate(),tripDTO.getLocation(),tripDTO.getDuration(),tripDTO.getPackingList());
+        Trip trip = new Trip(tripDTO.getName(), tripDTO.getDate(), tripDTO.getLocation(), tripDTO.getDuration(), tripDTO.getPackingList());
 
-        try{
+        try {
             em.getTransaction().begin();
             em.persist(trip);
             em.getTransaction().commit();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new Exception();
-        }finally {
+        } finally {
             em.close();
         }
-        return new StatusDTO("Success","New trip created");
+        return new StatusDTO("Success", "New trip created");
     }
 
     public StatusDTO removeTrip(Long tripId) {
@@ -103,7 +103,7 @@ public class TripFacade {
 
         try {
             em.getTransaction().begin();
-            Trip trip = em.find(Trip.class,tripId);
+            Trip trip = em.find(Trip.class, tripId);
             em.remove(trip);
             em.getTransaction().commit();
         } finally {
@@ -115,10 +115,10 @@ public class TripFacade {
     public StatusDTO addGuideToTrip(Long guideId, Long tripId) {
         EntityManager em = emf.createEntityManager();
 
-        try{
+        try {
             em.getTransaction().begin();
-            Guide guide = em.find(Guide.class,guideId);
-            Trip trip = em.find(Trip.class,tripId);
+            Guide guide = em.find(Guide.class, guideId);
+            Trip trip = em.find(Trip.class, tripId);
             trip.addGuide(guide);
             em.merge(trip);
             em.getTransaction().commit();

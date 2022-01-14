@@ -31,28 +31,28 @@ public class TripDTO {
         this.packingList = packingList;
     }
 
-    public TripDTO(Trip trip){
+    public TripDTO(Trip trip) {
         this.id = trip.getId();
         this.name = trip.getName();
         this.date = trip.getDate();
         this.location = trip.getLocation();
         this.duration = trip.getDuration();
         this.packingList = trip.getPackingList();
-        if(trip.getUsers() != null && !trip.getUsers().isEmpty()){
-            if(this.users == null){
+        if (trip.getUsers() != null && !trip.getUsers().isEmpty()) {
+            if (this.users == null) {
                 this.users = new ArrayList<>();
             }
             this.users = new UserDTO(trip.getUsers()).getUsers();
         }
-        if(trip.getGuide() != null){
+        if (trip.getGuide() != null) {
             this.guide = new GuideDTO(trip.getGuide());
         }
     }
 
-    public TripDTO(List<Trip> trips){
-        if(trips != null && !trips.isEmpty()){
+    public TripDTO(List<Trip> trips) {
+        if (trips != null && !trips.isEmpty()) {
             this.trips = new ArrayList<>();
-            for(Trip trip: trips){
+            for (Trip trip : trips) {
                 this.trips.add(new TripDTO(trip));
             }
         }

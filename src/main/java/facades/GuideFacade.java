@@ -30,12 +30,12 @@ public class GuideFacade {
         return instance;
     }
 
-    public GuideDTO getGuide(Long id){
+    public GuideDTO getGuide(Long id) {
         EntityManager em = emf.createEntityManager();
         GuideDTO guideDTO;
         try {
             em.getTransaction().begin();
-            Guide guide = em.find(Guide.class,id);
+            Guide guide = em.find(Guide.class, id);
             em.getTransaction().commit();
             guideDTO = new GuideDTO(guide);
         } finally {
@@ -48,7 +48,7 @@ public class GuideFacade {
         EntityManager em = emf.createEntityManager();
         List<Guide> guides;
         try {
-            TypedQuery<Guide> tq = em.createQuery("select g from Guide g",Guide.class);
+            TypedQuery<Guide> tq = em.createQuery("select g from Guide g", Guide.class);
             guides = tq.getResultList();
         } finally {
             em.close();
@@ -58,18 +58,18 @@ public class GuideFacade {
 
     public StatusDTO createGuide(GuideDTO guideDTO) throws API_Exception {
         EntityManager em = emf.createEntityManager();
-        Guide guide = new Guide(guideDTO.getName(),guideDTO.getGender(),guideDTO.getBirthYear(), guideDTO.getProfile(), guideDTO.getImageUrl());
+        Guide guide = new Guide(guideDTO.getName(), guideDTO.getGender(), guideDTO.getBirthYear(), guideDTO.getProfile(), guideDTO.getImageUrl());
 
-        try{
+        try {
             em.getTransaction().begin();
             em.persist(guide);
             em.getTransaction().commit();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new API_Exception();
-        }finally {
+        } finally {
             em.close();
         }
 
-        return new StatusDTO("Success","New guide created");
+        return new StatusDTO("Success", "New guide created");
     }
 }

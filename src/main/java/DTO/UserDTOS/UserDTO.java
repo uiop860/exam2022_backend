@@ -27,10 +27,10 @@ public class UserDTO {
         this.gender = user.getGender();
     }
 
-    public UserDTO(List<User> users){
-        if(users != null && !users.isEmpty() ){
+    public UserDTO(List<User> users) {
+        if (users != null && !users.isEmpty()) {
             this.users = new ArrayList<>();
-            for(User user: users){
+            for (User user : users) {
                 this.users.add(new UserDTO(user));
             }
         }
@@ -40,7 +40,7 @@ public class UserDTO {
         return userName;
     }
 
-    public List<UserDTO> getUsers(){
+    public List<UserDTO> getUsers() {
         return users;
     }
 

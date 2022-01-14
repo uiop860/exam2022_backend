@@ -56,13 +56,13 @@ public class User implements Serializable {
 
     @JoinTable(name = "user_roles", joinColumns = {
             @JoinColumn(name = "user_name", referencedColumnName = "user_name")},
-            inverseJoinColumns = { @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
+            inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "role_name")})
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
 
     @JoinTable(name = "user_trips", joinColumns = {
             @JoinColumn(name = "user_name", referencedColumnName = "user_name")},
-            inverseJoinColumns = { @JoinColumn(name = "trip_id", referencedColumnName = "id")})
+            inverseJoinColumns = {@JoinColumn(name = "trip_id", referencedColumnName = "id")})
     @ManyToMany()
     private List<Trip> trips = new ArrayList<>();
 
@@ -93,7 +93,7 @@ public class User implements Serializable {
     public User(String userName, String userPass, String address, String phone, String email, String birthYear, String gender) {
         this.userName = userName;
         String salt = BCrypt.gensalt();
-        this.userPass = BCrypt.hashpw(userPass,salt);
+        this.userPass = BCrypt.hashpw(userPass, salt);
         this.address = address;
         this.phone = phone;
         this.email = email;
@@ -127,13 +127,13 @@ public class User implements Serializable {
         roleList.add(userRole);
     }
 
-    public void addTrip(Trip trip){
+    public void addTrip(Trip trip) {
         this.trips.add(trip);
         trip.addUser(this);
     }
 
-    public void removeTrip(Trip trip){
-        if(this.trips != null && !this.trips.isEmpty()){
+    public void removeTrip(Trip trip) {
+        if (this.trips != null && !this.trips.isEmpty()) {
             this.trips.remove(trip);
             trip.removeUser(this);
         }

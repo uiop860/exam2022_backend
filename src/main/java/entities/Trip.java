@@ -2,12 +2,7 @@ package entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -71,22 +66,22 @@ public class Trip {
         this.packingList = packingList;
     }
 
-    public void addUser(User user){
+    public void addUser(User user) {
         users.add(user);
     }
 
-    public void removeUser(User user){
-        if(this.users != null && !this.users.isEmpty()){
+    public void removeUser(User user) {
+        if (this.users != null && !this.users.isEmpty()) {
             users.remove(user);
         }
     }
 
-    public void addGuide(Guide guide){
+    public void addGuide(Guide guide) {
         this.guide = guide;
         guide.addTrip(this);
     }
 
-    public void removeGuide(Guide guide){
+    public void removeGuide(Guide guide) {
         this.guide = null;
         guide.removeTrip(this);
     }

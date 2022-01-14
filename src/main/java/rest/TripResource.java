@@ -1,6 +1,5 @@
 package rest;
 
-import DTO.GuideDTOS.GuideDTO;
 import DTO.StatusDTOS.StatusDTO;
 import DTO.TripDTOS.TripDTO;
 import com.google.gson.Gson;
@@ -15,7 +14,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.*;
+import java.util.List;
 
 @Path("trip")
 public class TripResource {
@@ -25,7 +24,7 @@ public class TripResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"admin","user"})
+    @RolesAllowed({"admin", "user"})
     @Path("all")
     public String getAllTrips() throws API_Exception {
         TripFacade facade = TripFacade.getTripFacade(EMF);
@@ -33,17 +32,17 @@ public class TripResource {
 
         try {
             tripsDTO = facade.getAllTrips();
-        } catch(Exception e) {
-            throw new API_Exception("Something went wrong", 400,e);
+        } catch (Exception e) {
+            throw new API_Exception("Something went wrong", 400, e);
         }
         return gson.toJson(tripsDTO);
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"admin","user"})
+    @RolesAllowed({"admin", "user"})
     @Path("adduser")
-    public String addUserToTrip( String jsonString) throws API_Exception {
+    public String addUserToTrip(String jsonString) throws API_Exception {
         TripFacade facade = TripFacade.getTripFacade(EMF);
         StatusDTO statusDTO;
         Long tripId;
@@ -58,8 +57,8 @@ public class TripResource {
         }
 
         try {
-            statusDTO = facade.addTripToUser(username,tripId);
-        } catch(Exception e) {
+            statusDTO = facade.addTripToUser(username, tripId);
+        } catch (Exception e) {
             throw new API_Exception("Something went wrong", 400, e);
         }
 
@@ -68,7 +67,7 @@ public class TripResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"admin","user"})
+    @RolesAllowed({"admin", "user"})
     @Path("removeuser")
     public String removeUserFromTrip(String jsonString) throws API_Exception {
         TripFacade facade = TripFacade.getTripFacade(EMF);
@@ -85,8 +84,8 @@ public class TripResource {
         }
 
         try {
-            statusDTO = facade.removeTripFromUser(username,tripId);
-        } catch(Exception e) {
+            statusDTO = facade.removeTripFromUser(username, tripId);
+        } catch (Exception e) {
             throw new API_Exception("Something went wrong", 400, e);
         }
         return gson.toJson(statusDTO);
@@ -103,14 +102,14 @@ public class TripResource {
 
         try {
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
-            tripDTO = gson.fromJson(json,TripDTO.class);
+            tripDTO = gson.fromJson(json, TripDTO.class);
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
 
         try {
             statusDTO = facade.createTrip(tripDTO);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new API_Exception("Something went wrong", 400, e);
         }
         return gson.toJson(statusDTO);
@@ -126,7 +125,7 @@ public class TripResource {
 
         try {
             statusDTO = facade.removeTrip(tripId);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new API_Exception("Something went wrong", 400, e);
         }
         return gson.toJson(statusDTO);
@@ -151,8 +150,8 @@ public class TripResource {
         }
 
         try {
-            statusDTO = facade.addGuideToTrip(guideId,tripId);
-        } catch(Exception e) {
+            statusDTO = facade.addGuideToTrip(guideId, tripId);
+        } catch (Exception e) {
             throw new API_Exception("Something went wrong", 400, e);
         }
 

@@ -26,7 +26,7 @@ public class GuideDTO {
         this.imageUrl = imageUrl;
     }
 
-    public GuideDTO(Guide guide){
+    public GuideDTO(Guide guide) {
         this.id = guide.getId();
         this.name = guide.getName();
         this.gender = guide.getGender();
@@ -35,10 +35,10 @@ public class GuideDTO {
         this.imageUrl = guide.getImageUrl();
     }
 
-    public GuideDTO(List<Guide> guides){
-        if(guides != null && !guides.isEmpty()){
+    public GuideDTO(List<Guide> guides) {
+        if (guides != null && !guides.isEmpty()) {
             this.guides = new ArrayList<>();
-            for(Guide trip: guides){
+            for (Guide trip : guides) {
                 this.guides.add(new GuideDTO(trip));
             }
         }

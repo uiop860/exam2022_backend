@@ -83,17 +83,17 @@ public class GuideResourceTest {
             Calendar cal = Calendar.getInstance();
             cal.setTimeZone(TimeZone.getTimeZone("CET"));
 
-            User user = new User("user", "kode123","Åmarksvej 24","27463547","user@user.com","1967","Mand");
-            User admin = new User("admin", "kode123","Fredensvej 65", "96758453", "admin@admin.com","1990","Kvinde");
-            User both = new User("user_admin", "kode123", "Kildevej 154","94857693","both@both.com","2000","Mand");
+            User user = new User("user", "kode123", "Åmarksvej 24", "27463547", "user@user.com", "1967", "Mand");
+            User admin = new User("admin", "kode123", "Fredensvej 65", "96758453", "admin@admin.com", "1990", "Kvinde");
+            User both = new User("user_admin", "kode123", "Kildevej 154", "94857693", "both@both.com", "2000", "Mand");
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
-            cal.set(2022,Calendar.JANUARY,1);
-            Trip trip1 = new Trip("Hike", cal.getTime() , "Himmelbjerget","2 hours","Water");
-            cal.set(2022,Calendar.MARCH,17);
-            Trip trip2 = new Trip("Dance",cal.getTime(),"Byen","5 hours","Dancing shoes");
-            Guide guide1 = new Guide("Anders","Mand","1987","I like to swim","www.test.com");
-            Guide guide2 = new Guide("Lisa","Kvinde","1975","I like to dance","www.test.com");
+            cal.set(2022, Calendar.JANUARY, 1);
+            Trip trip1 = new Trip("Hike", cal.getTime(), "Himmelbjerget", "2 hours", "Water");
+            cal.set(2022, Calendar.MARCH, 17);
+            Trip trip2 = new Trip("Dance", cal.getTime(), "Byen", "5 hours", "Dancing shoes");
+            Guide guide1 = new Guide("Anders", "Mand", "1987", "I like to swim", "www.test.com");
+            Guide guide2 = new Guide("Lisa", "Kvinde", "1975", "I like to dance", "www.test.com");
 
             em.getTransaction().begin();
             em.persist(userRole);
@@ -164,7 +164,7 @@ public class GuideResourceTest {
 
     @Test
     void getAllGuidesTest() {
-        login("user","kode123");
+        login("user", "kode123");
         Response response = given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
@@ -175,36 +175,36 @@ public class GuideResourceTest {
                 .extract().response();
 
         List<String> jsonResponse = response.jsonPath().getList("$");
-        Assertions.assertEquals(2,jsonResponse.size());
+        Assertions.assertEquals(2, jsonResponse.size());
     }
 
     @Test
     void getGuideTest() {
-        login("user","kode123");
+        login("user", "kode123");
         given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
-            .when()
+                .when()
                 .get("guide/1")
-            .then()
+                .then()
                 .statusCode(200)
-                .body("name",equalTo("Anders"));
+                .body("name", equalTo("Anders"));
     }
 
     @Test
     void createGuideTest() {
-        GuideDTO guide = new GuideDTO("Brian","Mand","1970","Likes to workout","www.brian.com");
+        GuideDTO guide = new GuideDTO("Brian", "Mand", "1970", "Likes to workout", "www.brian.com");
 
-        login("admin","kode123");
+        login("admin", "kode123");
         given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
                 .body(gson.toJson(guide))
-            .when()
+                .when()
                 .post("guide/create")
-            .then()
+                .then()
                 .statusCode(200)
-                .body("status",equalTo("Success"))
+                .body("status", equalTo("Success"))
                 .body("message", equalTo("New guide created"));
     }
 }

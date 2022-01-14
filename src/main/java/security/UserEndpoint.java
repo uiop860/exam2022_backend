@@ -111,13 +111,13 @@ public class UserEndpoint {
         } catch (Exception e) {
             throw new API_Exception("Malformed JSON Suplied", 400, e);
         }
-        if(username.length() != 0 && password.length() != 0){
+        if (username.length() != 0 && password.length() != 0) {
             try {
                 return gson.toJson(USER_FACADE.createUser(username, password));
             } catch (Exception e) {
                 throw new API_Exception("Failed to create user", 400, e);
             }
-        } else{
+        } else {
             throw new API_Exception("Failed to create user", 400);
         }
     }
@@ -141,7 +141,7 @@ public class UserEndpoint {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
     @Path("update/{userName}")
-    @RolesAllowed({"admin","user"})
+    @RolesAllowed({"admin", "user"})
     public String updateUserPassword(@PathParam("userName") String userName, String jsonString) throws API_Exception {
 
         String newPassword;
@@ -170,14 +170,14 @@ public class UserEndpoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("search/{userName}")
-    @RolesAllowed({"admin","user"})
+    @RolesAllowed({"admin", "user"})
     public String partialUsernameSearch(@PathParam("userName") String userName) throws API_Exception {
 
         List<UserDTO> response;
 
         try {
             response = USER_FACADE.partialUsernameSearch(userName);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new API_Exception("Failed to find user(s)", 400, e);
         }
         return gson.toJson(response);

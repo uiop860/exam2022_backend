@@ -67,7 +67,7 @@ public class UserFacade {
             }
             em.persist(user);
             em.getTransaction().commit();
-        }finally {
+        } finally {
             em.close();
         }
         return new StatusDTO("Success", "User successfully created with username: " + username);
@@ -93,7 +93,7 @@ public class UserFacade {
         try {
             em.getTransaction().begin();
             User user = em.find(User.class, userName);
-            if(user.verifyPassword(oldPassword,user.getUserPass())){
+            if (user.verifyPassword(oldPassword, user.getUserPass())) {
                 user.setUserPass(newPassword);
                 em.merge(user);
             } else {
@@ -114,14 +114,14 @@ public class UserFacade {
         List<UserDTO> userDTOS = new ArrayList<>();
 
         try {
-            TypedQuery<User> tq = em.createQuery("select u from User u where u.userName like :username",User.class);
-            tq.setParameter("username","%" + userName + "%");
+            TypedQuery<User> tq = em.createQuery("select u from User u where u.userName like :username", User.class);
+            tq.setParameter("username", "%" + userName + "%");
             users = tq.getResultList();
         } finally {
             em.close();
         }
 
-        for (User user: users) {
+        for (User user : users) {
             userDTOS.add(new UserDTO(user));
         }
 

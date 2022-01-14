@@ -4,7 +4,10 @@ import DTO.UserDTOS.UserDTO;
 import entities.Role;
 import entities.User;
 import errorhandling.API_Exception;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import security.errorhandling.AuthenticationException;
 import utils.EMF_Creator;
 
@@ -73,10 +76,10 @@ public class UserFacadeTest {
 
     @Test
     public void getVerifiedUserTest() throws AuthenticationException {
-        User user = facade.getVerifiedUser("user1","kode123");
+        User user = facade.getVerifiedUser("user1", "kode123");
 
         Assertions.assertEquals("user1", user.getUserName());
-        Assertions.assertTrue(user.verifyPassword("kode123",user.getUserPass()));
+        Assertions.assertTrue(user.verifyPassword("kode123", user.getUserPass()));
     }
 
     @Test
@@ -84,16 +87,16 @@ public class UserFacadeTest {
         EntityManager em = emf.createEntityManager();
         User user;
 
-        facade.createUser("test","test");
+        facade.createUser("test", "test");
 
         try {
-            user = em.find(User.class,"test");
+            user = em.find(User.class, "test");
         } finally {
             em.close();
         }
 
         Assertions.assertEquals("test", user.getUserName());
-        Assertions.assertTrue(user.verifyPassword("test",user.getUserPass()));
+        Assertions.assertTrue(user.verifyPassword("test", user.getUserPass()));
     }
 
     @Test
@@ -117,7 +120,7 @@ public class UserFacadeTest {
         EntityManager em = emf.createEntityManager();
         User user;
 
-        facade.updateUserPassword("user2","test123", "kode123");
+        facade.updateUserPassword("user2", "test123", "kode123");
 
         try {
             user = em.find(User.class, "user2");
@@ -125,7 +128,7 @@ public class UserFacadeTest {
             em.close();
         }
 
-        Assertions.assertTrue(user.verifyPassword("test123",user.getUserPass()));
+        Assertions.assertTrue(user.verifyPassword("test123", user.getUserPass()));
     }
 
     @Test

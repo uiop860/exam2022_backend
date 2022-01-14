@@ -2,9 +2,7 @@ package entities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -66,7 +64,7 @@ public class Guide {
         this.trips.add(trip);
     }
 
-    public void removeTrip(Trip trip){
+    public void removeTrip(Trip trip) {
         this.trips.remove(trip);
     }
 
