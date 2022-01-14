@@ -1,6 +1,6 @@
 package rest;
 
-import DTO.TripDTOS.TripDTO;
+import DTO.GuideDTOS.GuideDTO;
 import com.google.gson.Gson;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import entities.Guide;
@@ -27,7 +27,7 @@ import java.util.TimeZone;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class TripResourceTest {
+public class GuideResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
@@ -163,14 +163,14 @@ public class TripResourceTest {
     }
 
     @Test
-    void getAllTripsTest() {
+    void getAllGuidesTest() {
         login("user","kode123");
         Response response = given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
-            .when()
-                .get("trip/all")
-            .then()
+                .when()
+                .get("guide/all")
+                .then()
                 .statusCode(200)
                 .extract().response();
 
@@ -179,92 +179,45 @@ public class TripResourceTest {
     }
 
     @Test
-    void addTripToUserTest() {
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("username", "admin");
-        requestParams.put("tripid", 1L);
+    void getGuideTest() {
+        login("user","kode123");
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+            .when()
+                .get("guide/1")
+            .then()
+                .statusCode(200)
+                .body("name",equalTo("Anders"));
+    }
+
+    @Test
+    void createGuideTest() {
+        GuideDTO guide = new GuideDTO("Brian","Mand","1970","Likes to workout","www.brian.com");
 
         login("user","kode123");
         given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
-                .body(requestParams.toJSONString())
+                .body(gson.toJson(guide))
             .when()
-                .post("trip/adduser")
+                .post("guide/create")
             .then()
                 .statusCode(200)
-                .body("status", equalTo("Success"))
-                .body("message", equalTo("Trip added to admin"));
-    }
-
-    @Test
-    void removeUserFromTripTest() {
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("username", "user");
-        requestParams.put("tripid", 1L);
-
-        login("user","kode123");
-        given()
-                .contentType("application/json")
-                .header("x-access-token", securityToken)
-                .body(requestParams.toJSONString())
-            .when()
-                .post("trip/removeuser")
-            .then()
-                .statusCode(200)
-                .body("status", equalTo("Success"))
-                .body("message", equalTo("Trip removed from user"));
-    }
-
-    @Test
-    void createTripTest(){
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeZone(TimeZone.getTimeZone("CET"));
-        cal.set(2022,Calendar.SEPTEMBER,13);
-        TripDTO trip = new TripDTO("Wakeboarding",cal.getTime(),"Hørsholm","3 hours","Wakeboard");
-
-        login("user","kode123");
-        given()
-                .contentType("application/json")
-                .header("x-access-token", securityToken)
-                .body(gson.toJson(trip))
-            .when()
-                .post("trip/create")
-            .then()
-                .statusCode(200)
-                .body("status", equalTo("Success"))
-                .body("message", equalTo("New trip created"));
-    }
-
-    @Test
-    void removeTripTest() {
-        login("user","kode123");
-        //problemer med at få den her test til at virke :(
-        given()
-                .contentType("application/json")
-                .header("x-access-token",securityToken)
-            .when()
-                .post("trip/remove/1")
-            .then()
-                .statusCode(200);
-    }
-
-    @Test
-    void addGuideToTripTest() {
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("guideId", 2L);
-        requestParams.put("tripId", 1L);
-
-        login("user","kode123");
-        given()
-                .contentType("application/json")
-                .header("x-access-token", securityToken)
-                .body(requestParams.toJSONString())
-            .when()
-                .post("trip/addguide")
-            .then()
-                .statusCode(200)
-                .body("status", equalTo("Success"))
-                .body("message", equalTo("Guide added to trip"));
+                .body("status",equalTo("Success"))
+                .body("message", equalTo("New guide created"));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
