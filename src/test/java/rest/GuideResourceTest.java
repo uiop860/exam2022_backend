@@ -195,7 +195,7 @@ public class GuideResourceTest {
     void createGuideTest() {
         GuideDTO guide = new GuideDTO("Brian","Mand","1970","Likes to workout","www.brian.com");
 
-        login("user","kode123");
+        login("admin","kode123");
         given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
@@ -208,16 +208,3 @@ public class GuideResourceTest {
                 .body("message", equalTo("New guide created"));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

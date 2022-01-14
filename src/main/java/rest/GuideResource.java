@@ -10,6 +10,7 @@ import errorhandling.API_Exception;
 import facades.GuideFacade;
 import utils.EMF_Creator;
 
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -24,6 +25,7 @@ public class GuideResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"admin","user"})
     @Path("/all")
     public String getAllGuides() throws API_Exception {
         GuideFacade facade = GuideFacade.getGuideFacade(EMF);
@@ -39,6 +41,7 @@ public class GuideResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"admin","user"})
     @Path("{id}")
     public String getGuide(@PathParam("id") Long id) throws API_Exception {
 
@@ -55,6 +58,7 @@ public class GuideResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"admin"})
     @Path("create")
     public String createGuide(String jsonString) throws API_Exception, ParseException {
         GuideFacade facade = GuideFacade.getGuideFacade(EMF);

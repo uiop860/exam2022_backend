@@ -41,6 +41,7 @@ public class TripResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"admin","user"})
     @Path("adduser")
     public String addUserToTrip( String jsonString) throws API_Exception {
         TripFacade facade = TripFacade.getTripFacade(EMF);
@@ -67,6 +68,7 @@ public class TripResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"admin","user"})
     @Path("removeuser")
     public String removeUserFromTrip(String jsonString) throws API_Exception {
         TripFacade facade = TripFacade.getTripFacade(EMF);
@@ -92,6 +94,7 @@ public class TripResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"admin"})
     @Path("create")
     public String createTrip(String jsonString) throws API_Exception {
         TripFacade facade = TripFacade.getTripFacade(EMF);
@@ -115,6 +118,7 @@ public class TripResource {
 
     @POST
     @Produces
+    @RolesAllowed({"admin"})
     @Path("remove/{tripId}")
     public String removeTrip(@PathParam("tripId") Long tripId) throws API_Exception {
         TripFacade facade = TripFacade.getTripFacade(EMF);
@@ -130,6 +134,7 @@ public class TripResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"admin"})
     @Path("addguide")
     public String addTripToGuide(String jsonString) throws API_Exception {
         TripFacade facade = TripFacade.getTripFacade(EMF);

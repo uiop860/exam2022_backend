@@ -223,7 +223,7 @@ public class TripResourceTest {
         cal.set(2022,Calendar.SEPTEMBER,13);
         TripDTO trip = new TripDTO("Wakeboarding",cal.getTime(),"Hørsholm","3 hours","Wakeboard");
 
-        login("user","kode123");
+        login("admin","kode123");
         given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
@@ -238,7 +238,7 @@ public class TripResourceTest {
 
     @Test
     void removeTripTest() {
-        login("user","kode123");
+        login("admin","kode123");
         //problemer med at få den her test til at virke :(
         given()
                 .contentType("application/json")
@@ -255,7 +255,7 @@ public class TripResourceTest {
         requestParams.put("guideId", 2L);
         requestParams.put("tripId", 1L);
 
-        login("user","kode123");
+        login("admin","kode123");
         given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
