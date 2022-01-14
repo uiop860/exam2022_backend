@@ -18,6 +18,10 @@ public class API_Exception extends Exception {
         this.errorCode = 400;
     }
 
+    public API_Exception() {
+
+    }
+
     public int getErrorCode() {
         return errorCode;
     }

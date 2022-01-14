@@ -1,4 +1,4 @@
-package DTO.StatusDTO;
+package DTO.StatusDTOS;
 
 public class StatusDTO {
     private String status;

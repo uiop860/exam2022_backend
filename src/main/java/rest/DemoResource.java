@@ -27,9 +27,6 @@ public class DemoResource {
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     @Context
     private UriInfo context;
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//    private Gson gson = new Gson();
-
     @Context
     SecurityContext securityContext;
 

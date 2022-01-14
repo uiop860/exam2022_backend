@@ -22,11 +22,37 @@ public class User implements Serializable {
     @NotNull
     private String userName;
 
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "user_pass")
     private String userPass;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "address")
+    private String address;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "phone")
+    private String phone;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "email")
+    private String email;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "birth_year")
+    private String birthYear;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "gender")
+    private String gender;
 
     @JoinTable(name = "user_roles", joinColumns = {
             @JoinColumn(name = "user_name", referencedColumnName = "user_name")},
@@ -64,9 +90,17 @@ public class User implements Serializable {
         this.userPass = BCrypt.hashpw(userPass, salt);
     }
 
-    public String getUserName() {
-        return userName;
+    public User(String userName, String userPass, String address, String phone, String email, String birthYear, String gender) {
+        this.userName = userName;
+        String salt = BCrypt.gensalt();
+        this.userPass = BCrypt.hashpw(userPass,salt);
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.birthYear = birthYear;
+        this.gender = gender;
     }
+
 
     public void setUserName(String userName) {
         this.userName = userName;
@@ -98,4 +132,34 @@ public class User implements Serializable {
         trip.addUser(this);
     }
 
+    public void removeTrip(Trip trip){
+        if(this.trips != null && !this.trips.isEmpty()){
+            this.trips.remove(trip);
+            trip.removeUser(this);
+        }
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getBirthYear() {
+        return birthYear;
+    }
+
+    public String getGender() {
+        return gender;
+    }
 }

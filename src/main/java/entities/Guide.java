@@ -57,9 +57,6 @@ public class Guide {
         this.imageUrl = imageUrl;
     }
 
-    public Long getId() {
-        return id;
-    }
 
     public void setId(Long id) {
         this.id = id;
@@ -67,5 +64,37 @@ public class Guide {
 
     public void addTrip(Trip trip) {
         this.trips.add(trip);
+    }
+
+    public void removeTrip(Trip trip){
+        this.trips.remove(trip);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getBirthYear() {
+        return birthYear;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public List<Trip> getTrips() {
+        return trips;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

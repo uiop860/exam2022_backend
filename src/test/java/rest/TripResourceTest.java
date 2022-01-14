@@ -1,17 +1,15 @@
 package rest;
 
-import DTO.UserDTOS.UserDTO;
+import DTO.TripDTOS.TripDTO;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.nimbusds.jose.shaded.json.JSONObject;
+import entities.Guide;
 import entities.Role;
+import entities.Trip;
 import entities.User;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 import io.restassured.response.Response;
-import io.restassured.response.ResponseBodyExtractionOptions;
-import io.restassured.specification.RequestSpecification;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -22,14 +20,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-//Disabled
-public class UserEndpointTest {
+public class TripResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
@@ -76,26 +74,55 @@ public class UserEndpointTest {
             em.createNamedQuery("User.resetAutoIncrement").executeUpdate();
             em.createNamedQuery("Role.deleteAllRows").executeUpdate();
             em.createNamedQuery("Role.resetAutoIncrement").executeUpdate();
+            em.createNamedQuery("Trip.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Trip.resetAutoIncrement").executeUpdate();
+            em.createNamedQuery("Guide.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Guide.resetAutoIncrement").executeUpdate();
             em.getTransaction().commit();
 
-            User user1 = new User("user1", "kode123");
-            User user2 = new User("user2", "kode123");
-            User admin = new User("admin", "kode123");
-            User both = new User("user_admin", "kode123");
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeZone(TimeZone.getTimeZone("CET"));
 
+            User user = new User("user", "kode123","Åmarksvej 24","27463547","user@user.com","1967","Mand");
+            User admin = new User("admin", "kode123","Fredensvej 65", "96758453", "admin@admin.com","1990","Kvinde");
+            User both = new User("user_admin", "kode123", "Kildevej 154","94857693","both@both.com","2000","Mand");
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
+            cal.set(2022,Calendar.JANUARY,1);
+            Trip trip1 = new Trip("Hike", cal.getTime() , "Himmelbjerget","2 hours","Water");
+            cal.set(2022,Calendar.MARCH,17);
+            Trip trip2 = new Trip("Dance",cal.getTime(),"Byen","5 hours","Dancing shoes");
+            Guide guide1 = new Guide("Anders","Mand","1987","I like to swim","www.test.com");
+            Guide guide2 = new Guide("Lisa","Kvinde","1975","I like to dance","www.test.com");
 
             em.getTransaction().begin();
             em.persist(userRole);
             em.persist(adminRole);
-            user1.addRole(userRole);
-            em.persist(user1);
             em.getTransaction().commit();
 
             em.getTransaction().begin();
-            user2.addRole(userRole);
-            em.persist(user2);
+            em.persist(guide1);
+            em.getTransaction().commit();
+
+            em.getTransaction().begin();
+            em.persist(guide2);
+            em.getTransaction().commit();
+
+            em.getTransaction().begin();
+            trip1.addGuide(guide1);
+            em.persist(trip1);
+            em.getTransaction().commit();
+
+            em.getTransaction().begin();
+            trip2.addGuide(guide2);
+            em.persist(trip2);
+            em.getTransaction().commit();
+
+            em.getTransaction().begin();
+            user.addRole(userRole);
+            user.addTrip(trip1);
+            user.addTrip(trip2);
+            em.persist(user);
             em.getTransaction().commit();
 
             em.getTransaction().begin();
@@ -125,9 +152,9 @@ public class UserEndpointTest {
         securityToken = given()
                 .contentType("application/json")
                 .body(requestParams.toJSONString())
-            .when()
+                .when()
                 .post("user")
-            .then()
+                .then()
                 .extract().path("token");
     }
 
@@ -135,102 +162,113 @@ public class UserEndpointTest {
         securityToken = null;
     }
 
-
-
     @Test
-    public void createUserTest() {
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("username", "megatest");
-        requestParams.put("password", "thisisatest123");
-
-        logOut();
-        given()
-                .contentType("application/json")
-                .body(requestParams.toJSONString())
-            .when()
-                .post("user/create")
-            .then()
-                .statusCode(200)
-                .body("status", equalTo("Success"))
-                .body("message", equalTo("User successfully created with username: megatest"));
-    }
-
-    @Test
-    public void createAlreadyExistingUserTest() {
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("username", "user1");
-        requestParams.put("password", "test");
-
-        logOut();
-        given()
-                .contentType("application/json")
-                .body(requestParams.toJSONString())
-            .when()
-                .post("user/create")
-            .then()
-                .statusCode(400)
-                .body("message", equalTo("Failed to create user"));
-    }
-
-    @Test
-    public void deleteUserTest() {
-        login("admin", "kode123");
-        given()
-                .contentType("application/json")
-                .header("x-access-token", securityToken)
-            .when()
-                .delete("user/delete/user1")
-            .then()
-                .statusCode(200)
-                .body("status", equalTo("Success"))
-                .body("message", equalTo("Deleted user on username: user1"));
-    }
-
-    @Test
-    public void deleteNotExistingUserTest() {
-        login("admin", "kode123");
-        given()
-                .contentType("application/json")
-                .header("x-access-token", securityToken)
-            .when()
-                .delete("user/delete/kage123")
-            .then()
-                .statusCode(400)
-                .body("message", equalTo("Failed to delete user"));
-    }
-
-    @Test
-    public void updateUserPasswordTest() {
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("oldPassword","kode123");
-        requestParams.put("password","test1");
-
-        login("user1", "kode123");
-        given()
-                .contentType("application/json")
-                .header("x-access-token", securityToken)
-                .body(requestParams.toJSONString())
-            .when()
-                .post("user/update/user1")
-            .then()
-                .statusCode(200)
-                .body("status", equalTo("Success"))
-                .body("message", equalTo("Password changed on username: user1"));
-    }
-
-    @Test
-    public void partialUsernameSearchTest(){
-        login("user1","kode123");
+    void getAllTripsTest() {
+        login("user","kode123");
+        System.out.println(securityToken);
         Response response = given()
                 .contentType("application/json")
                 .header("x-access-token", securityToken)
             .when()
-                .get("user/search/ser")
+                .get("trip/all")
             .then()
                 .statusCode(200)
                 .extract().response();
 
         List<String> jsonResponse = response.jsonPath().getList("$");
-        Assertions.assertEquals(3,jsonResponse.size());
+        Assertions.assertEquals(2,jsonResponse.size());
+    }
+
+    @Test
+    void addTripToUserTest() {
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("username", "admin");
+        requestParams.put("tripid", 1L);
+
+        login("user","kode123");
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .body(requestParams.toJSONString())
+            .when()
+                .post("trip/adduser")
+            .then()
+                .statusCode(200)
+                .body("status", equalTo("Success"))
+                .body("message", equalTo("Trip added to admin"));
+    }
+
+    @Test
+    void removeUserFromTripTest() {
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("username", "user");
+        requestParams.put("tripid", 1L);
+
+        login("user","kode123");
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .body(requestParams.toJSONString())
+            .when()
+                .post("trip/removeuser")
+            .then()
+                .statusCode(200)
+                .body("status", equalTo("Success"))
+                .body("message", equalTo("Trip removed from user"));
+    }
+
+    @Test
+    void createTripTest(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(TimeZone.getTimeZone("CET"));
+        cal.set(2022,Calendar.SEPTEMBER,13);
+        TripDTO trip = new TripDTO("Wakeboarding",cal.getTime(),"Hørsholm","3 hours","Wakeboard");
+
+        login("user","kode123");
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .body(gson.toJson(trip))
+            .when()
+                .post("trip/create")
+            .then()
+                .statusCode(200)
+                .body("status", equalTo("Success"))
+                .body("message", equalTo("New trip created"));
+    }
+
+    @Disabled
+    @Test
+    void removeTripTest() {
+        login("user","kode123");
+
+        given()
+                .contentType("application/json")
+                .header("x-access-token",securityToken)
+            .when()
+                .post("trip/remove/1")
+            .then()
+                .statusCode(200)
+                .body("status", equalTo("Success"));
+
+    }
+
+    @Test
+    void addGuideToTripTest() {
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("guideId", 2L);
+        requestParams.put("tripId", 1L);
+
+        login("user","kode123");
+        given()
+                .contentType("application/json")
+                .header("x-access-token", securityToken)
+                .body(requestParams.toJSONString())
+            .when()
+                .post("trip/addguide")
+            .then()
+                .statusCode(200)
+                .body("status", equalTo("Success"))
+                .body("message", equalTo("Guide added to trip"));
     }
 }

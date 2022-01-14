@@ -1,6 +1,6 @@
 package security;
 
-import DTO.StatusDTO.StatusDTO;
+import DTO.StatusDTOS.StatusDTO;
 import DTO.UserDTOS.UserDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

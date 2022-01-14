@@ -1,12 +1,9 @@
 package facades;
 
-import DTO.StatusDTO.StatusDTO;
+import DTO.StatusDTOS.StatusDTO;
 import DTO.UserDTOS.UserDTO;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import entities.Role;
 import entities.User;
-import errorhandling.API_Exception;
 import security.errorhandling.AuthenticationException;
 
 import javax.persistence.EntityManager;
@@ -22,7 +19,6 @@ public class UserFacade {
 
     private static EntityManagerFactory emf;
     private static UserFacade instance;
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private UserFacade() {
     }
